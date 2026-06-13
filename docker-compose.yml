@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-password}
+      MYSQL_DATABASE: mylog
+      MYSQL_USER: mylog
+      MYSQL_PASSWORD: ${DB_PASSWORD:-mylog123}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./prisma/ngram.cnf:/etc/mysql/conf.d/ngram.cnf
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "mysql://mylog:${DB_PASSWORD:-mylog123}@mysql:3306/mylog"
+      DATABASE_HOST: mysql
+      DATABASE_USER: mylog
+      DATABASE_PASSWORD: ${DB_PASSWORD:-mylog123}
+      DATABASE_NAME: mylog
+      DATABASE_PORT: "3306"
+      JWT_SECRET: ${JWT_SECRET:-change-me-to-a-random-string}
+      NEXT_PUBLIC_SITE_URL: ${SITE_URL:-http://localhost:3000}
+      NODE_ENV: production
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - uploads_data:/app/public/uploads
+
+volumes:
+  mysql_data:
+  uploads_data:
