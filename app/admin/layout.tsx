@@ -27,6 +27,7 @@ export default function AdminLayout({
     { href: "/admin", label: "仪表盘", icon: "📊" },
     { href: "/admin/posts", label: "文章管理", icon: "📝" },
     { href: "/admin/posts/new", label: "新建文章", icon: "➕" },
+    { href: "/admin/series", label: "专栏管理", icon: "📚" },
     { href: "/admin/categories", label: "分类管理", icon: "📁" },
     { href: "/admin/tags", label: "标签管理", icon: "🏷️" },
     { href: "/admin/comments", label: "评论审核", icon: "💬" },

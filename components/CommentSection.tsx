@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import CommentMarkdown from "./CommentMarkdown";
 
 interface Comment {
   id: number;
@@ -34,6 +35,7 @@ function CommentForm({
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -49,8 +51,8 @@ function CommentForm({
       return;
     }
 
-    if (content.length > 1000) {
-      setError("评论内容不能超过1000个字符");
+    if (content.length > 2000) {
+      setError("评论内容不能超过2000个字符");
       return;
     }
 
@@ -143,18 +145,57 @@ function CommentForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-          评论 <span className="text-red-500">*</span>
-        </label>
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          rows={3}
-          className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"
-          placeholder="写下你的想法..."
-          required
-        />
-        <p className="text-xs text-zinc-400 mt-1">{content.length}/1000</p>
+        <div className="flex items-center justify-between mb-1">
+          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+            评论 <span className="text-red-500">*</span>
+            <span className="text-zinc-400 font-normal text-xs ml-2">
+              支持 Markdown
+            </span>
+          </label>
+          <div className="flex gap-1">
+            <button
+              type="button"
+              onClick={() => setShowPreview(false)}
+              className={`text-xs px-2 py-0.5 rounded transition-colors ${
+                !showPreview
+                  ? "bg-zinc-900 dark:bg-white text-white dark:text-zinc-900"
+                  : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+              }`}
+            >
+              编写
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowPreview(true)}
+              className={`text-xs px-2 py-0.5 rounded transition-colors ${
+                showPreview
+                  ? "bg-zinc-900 dark:bg-white text-white dark:text-zinc-900"
+                  : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+              }`}
+            >
+              预览
+            </button>
+          </div>
+        </div>
+        {showPreview ? (
+          <div className="w-full min-h-[80px] px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-zinc-50 dark:bg-zinc-800 text-sm">
+            {content.trim() ? (
+              <CommentMarkdown content={content} />
+            ) : (
+              <p className="text-zinc-400 text-sm">暂无内容</p>
+            )}
+          </div>
+        ) : (
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            rows={3}
+            className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y font-mono"
+            placeholder="写下你的想法... 支持 **粗体** *斜体* `代码` ```代码块``` [链接](url)"
+            required
+          />
+        )}
+        <p className="text-xs text-zinc-400 mt-1">{content.length}/2000</p>
       </div>
 
       {/* Honeypot field */}
@@ -271,9 +312,9 @@ function CommentItem({
             )}
             <span className="text-xs text-zinc-400">{date}</span>
           </div>
-          <p className="text-sm text-zinc-700 dark:text-zinc-300 whitespace-pre-wrap">
-            {comment.content}
-          </p>
+          <div className="text-sm text-zinc-700 dark:text-zinc-300">
+            <CommentMarkdown content={comment.content} />
+          </div>
           <div className="flex items-center gap-4 mt-2">
             {/* 点赞 */}
             <CommentLikeButton commentId={comment.id} likeCount={comment.likeCount} />

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import GlobalGlow from "@/components/effects/GlobalGlow";
+import ThemeProvider from "@/components/ThemeProvider";
+import ThemeToggle from "@/components/ThemeToggle";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,8 +38,17 @@ export default function RootLayout({
     <html
       lang="zh-CN"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-zinc-50 dark:bg-zinc-950">
+        <ThemeProvider>
         <GlobalGlow>
         {/* Header */}
         <header className="sticky top-0 z-50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border-b border-zinc-200/60 dark:border-zinc-800">
@@ -63,6 +74,12 @@ export default function RootLayout({
                 >
                   搜索
                 </Link>
+                <Link
+                  href="/series"
+                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+                >
+                  专栏
+                </Link>
                 <a
                   href="/rss.xml"
                   target="_blank"
@@ -74,12 +91,15 @@ export default function RootLayout({
               </nav>
             </div>
 
-            <Link
-              href="/admin"
-              className="text-sm text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors"
-            >
-              管理
-            </Link>
+            <div className="flex items-center gap-3">
+              <ThemeToggle />
+              <Link
+                href="/admin"
+                className="text-sm text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors"
+              >
+                管理
+              </Link>
+            </div>
           </div>
         </header>
 
@@ -96,6 +116,7 @@ export default function RootLayout({
           </div>
         </footer>
         </GlobalGlow>
+        </ThemeProvider>
       </body>
     </html>
   );

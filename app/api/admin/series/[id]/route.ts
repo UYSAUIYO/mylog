@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  getArticleById,
-  updateArticle,
-  deleteArticle,
-} from "@/lib/db/articles";
 import { requireAdmin } from "@/lib/auth";
+import { getSeriesById, updateSeries, deleteSeries } from "@/lib/db/series";
 
 async function checkAuth() {
   try {
@@ -24,13 +20,13 @@ export async function GET(
   }
 
   const { id } = await params;
-  const article = await getArticleById(parseInt(id));
+  const series = await getSeriesById(parseInt(id));
 
-  if (!article) {
-    return NextResponse.json({ error: "文章不存在" }, { status: 404 });
+  if (!series) {
+    return NextResponse.json({ error: "系列不存在" }, { status: 404 });
   }
 
-  return NextResponse.json(article);
+  return NextResponse.json(series);
 }
 
 export async function PUT(
@@ -46,14 +42,11 @@ export async function PUT(
 
   try {
     const body = await request.json();
-    if (body.scheduledAt) {
-      body.scheduledAt = new Date(body.scheduledAt);
-    }
-    const article = await updateArticle(parseInt(id), body);
-    return NextResponse.json(article);
+    const series = await updateSeries(parseInt(id), body);
+    return NextResponse.json(series);
   } catch (error) {
-    console.error("Error updating article:", error);
-    return NextResponse.json({ error: "更新文章失败" }, { status: 500 });
+    console.error("Error updating series:", error);
+    return NextResponse.json({ error: "更新系列失败" }, { status: 500 });
   }
 }
 
@@ -69,10 +62,10 @@ export async function DELETE(
   const { id } = await params;
 
   try {
-    await deleteArticle(parseInt(id));
+    await deleteSeries(parseInt(id));
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting article:", error);
-    return NextResponse.json({ error: "删除文章失败" }, { status: 500 });
+    console.error("Error deleting series:", error);
+    return NextResponse.json({ error: "删除系列失败" }, { status: 500 });
   }
 }

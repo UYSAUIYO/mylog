@@ -17,6 +17,11 @@ interface Tag {
   slug: string;
 }
 
+interface SeriesOption {
+  id: number;
+  name: string;
+}
+
 export default function EditPostPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -35,14 +40,20 @@ export default function EditPostPage() {
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [scheduledAt, setScheduledAt] = useState("");
+  const [showSchedule, setShowSchedule] = useState(false);
+  const [seriesList, setSeriesList] = useState<SeriesOption[]>([]);
+  const [selectedSeriesId, setSelectedSeriesId] = useState<number | null>(null);
+  const [initialSeriesId, setInitialSeriesId] = useState<number | null>(null);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const [articleRes, catRes, tagRes] = await Promise.all([
+        const [articleRes, catRes, tagRes, seriesRes] = await Promise.all([
           fetch(`/api/admin/articles/${id}`),
           fetch("/api/admin/categories"),
           fetch("/api/admin/tags"),
+          fetch("/api/admin/series"),
         ]);
 
         const article = await articleRes.json();
@@ -65,8 +76,29 @@ export default function EditPostPage() {
           ) || []
         );
 
+        if (article.scheduledAt) {
+          const d = new Date(article.scheduledAt);
+          const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000)
+            .toISOString()
+            .slice(0, 16);
+          setScheduledAt(local);
+          setShowSchedule(true);
+        }
+
         setCategories(await catRes.json());
         setTags(await tagRes.json());
+
+        const seriesData = await seriesRes.json();
+        setSeriesList(seriesData || []);
+
+        // Check if article belongs to any series
+        const seriesArticles = seriesData?.filter((s: SeriesOption & { articles?: { article: { id: number } }[] }) =>
+          s.articles?.some((sa: { article: { id: number } }) => sa.article.id === parseInt(id))
+        );
+        if (seriesArticles?.length > 0) {
+          setSelectedSeriesId(seriesArticles[0].id);
+          setInitialSeriesId(seriesArticles[0].id);
+        }
       } catch (err) {
         console.error("Error loading article:", err);
         setError("加载文章失败");
@@ -102,6 +134,7 @@ export default function EditPostPage() {
           seoTitle: seoTitle || undefined,
           seoDescription: seoDescription || undefined,
           status: newStatus,
+          scheduledAt: scheduledAt || null,
         }),
       });
 
@@ -113,6 +146,27 @@ export default function EditPostPage() {
 
       setStatus(newStatus);
       router.refresh();
+
+      // Handle series change
+      if (selectedSeriesId !== initialSeriesId) {
+        // Remove from old series
+        if (initialSeriesId) {
+          await fetch(`/api/admin/series/${initialSeriesId}/articles`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ articleId: parseInt(id) }),
+          });
+        }
+        // Add to new series
+        if (selectedSeriesId) {
+          await fetch(`/api/admin/series/${selectedSeriesId}/articles`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ articleId: parseInt(id) }),
+          });
+        }
+        setInitialSeriesId(selectedSeriesId);
+      }
     } catch {
       setError("网络错误");
     } finally {
@@ -251,6 +305,28 @@ export default function EditPostPage() {
             ))}
           </div>
         </div>
+
+        {/* 系列专栏 */}
+        <div>
+          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+            所属专栏
+          </label>
+          <select
+            value={selectedSeriesId || ""}
+            onChange={(e) => setSelectedSeriesId(e.target.value ? parseInt(e.target.value) : null)}
+            className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">不属于任何专栏</option>
+            {seriesList.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+          <p className="text-xs text-zinc-400 mt-1">
+            可在专栏管理页面中调整文章顺序
+          </p>
+        </div>
       </div>
 
       <div className="mb-6">
@@ -280,6 +356,14 @@ export default function EditPostPage() {
         >
           发布
         </button>
+        <button
+          type="button"
+          onClick={() => setShowSchedule(!showSchedule)}
+          className="px-4 py-2 border border-orange-300 dark:border-orange-600 text-sm text-orange-700 dark:text-orange-400 rounded-lg hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors disabled:opacity-50"
+          disabled={saving}
+        >
+          {scheduledAt ? "修改定时" : "定时发布"}
+        </button>
         {status === "PUBLISHED" && (
           <button
             onClick={() => handleSave("DRAFT")}
@@ -304,6 +388,40 @@ export default function EditPostPage() {
           删除
         </button>
       </div>
+
+      {showSchedule && (
+        <div className="mt-4 p-4 border border-orange-200 dark:border-orange-800 rounded-lg bg-orange-50/50 dark:bg-orange-900/10">
+          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+            设定发布时间
+          </label>
+          <input
+            type="datetime-local"
+            value={scheduledAt}
+            onChange={(e) => setScheduledAt(e.target.value)}
+            className="px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          />
+          <p className="text-xs text-zinc-500 mt-2">
+            文章将保存为草稿，在设定时间后自动发布。
+          </p>
+          {scheduledAt && (
+            <div className="flex gap-2 mt-3">
+              <button
+                onClick={async () => { await handleSave("DRAFT"); }}
+                disabled={saving}
+                className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50"
+              >
+                {saving ? "保存中..." : "保存定时发布"}
+              </button>
+              <button
+                onClick={() => { setScheduledAt(""); }}
+                className="px-4 py-2 border border-zinc-300 dark:border-zinc-600 text-sm text-zinc-600 dark:text-zinc-400 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+              >
+                取消定时
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

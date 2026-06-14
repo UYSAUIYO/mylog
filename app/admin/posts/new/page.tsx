@@ -17,6 +17,11 @@ interface Tag {
   slug: string;
 }
 
+interface SeriesOption {
+  id: number;
+  name: string;
+}
+
 export default function NewPostPage() {
   const router = useRouter();
   const [title, setTitle] = useState("");
@@ -32,15 +37,21 @@ export default function NewPostPage() {
   const [tags, setTags] = useState<Tag[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [scheduledAt, setScheduledAt] = useState("");
+  const [showSchedule, setShowSchedule] = useState(false);
+  const [seriesList, setSeriesList] = useState<SeriesOption[]>([]);
+  const [selectedSeriesId, setSelectedSeriesId] = useState<number | null>(null);
 
   useEffect(() => {
     async function fetchData() {
-      const [catRes, tagRes] = await Promise.all([
+      const [catRes, tagRes, seriesRes] = await Promise.all([
         fetch("/api/admin/categories"),
         fetch("/api/admin/tags"),
+        fetch("/api/admin/series"),
       ]);
       setCategories(await catRes.json());
       setTags(await tagRes.json());
+      setSeriesList((await seriesRes.json()) || []);
     }
     fetchData();
   }, []);
@@ -79,6 +90,7 @@ export default function NewPostPage() {
           seoTitle: seoTitle || undefined,
           seoDescription: seoDescription || undefined,
           status,
+          scheduledAt: scheduledAt || undefined,
         }),
       });
 
@@ -89,6 +101,16 @@ export default function NewPostPage() {
       }
 
       const article = await res.json();
+
+      // Add to series if selected
+      if (selectedSeriesId) {
+        await fetch(`/api/admin/series/${selectedSeriesId}/articles`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ articleId: article.id }),
+        });
+      }
+
       router.push(`/admin/posts/${article.id}/edit`);
     } catch {
       setError("网络错误");
@@ -247,6 +269,25 @@ export default function NewPostPage() {
             ))}
           </div>
         </div>
+
+        {/* 系列专栏 */}
+        <div>
+          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+            所属专栏
+          </label>
+          <select
+            value={selectedSeriesId || ""}
+            onChange={(e) => setSelectedSeriesId(e.target.value ? parseInt(e.target.value) : null)}
+            className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">不属于任何专栏</option>
+            {seriesList.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="mb-6">
@@ -261,7 +302,7 @@ export default function NewPostPage() {
         <GlassMarkdownPreview content={content} />
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex gap-3 flex-wrap">
         <button
           onClick={() => handleSave("DRAFT")}
           disabled={saving}
@@ -276,7 +317,43 @@ export default function NewPostPage() {
         >
           {saving ? "保存中..." : "立即发布"}
         </button>
+        <button
+          type="button"
+          onClick={() => setShowSchedule(!showSchedule)}
+          className="px-4 py-2 border border-orange-300 dark:border-orange-600 text-sm text-orange-700 dark:text-orange-400 rounded-lg hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors disabled:opacity-50"
+          disabled={saving}
+        >
+          定时发布
+        </button>
       </div>
+
+      {showSchedule && (
+        <div className="mt-4 p-4 border border-orange-200 dark:border-orange-800 rounded-lg bg-orange-50/50 dark:bg-orange-900/10">
+          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+            设定发布时间
+          </label>
+          <input
+            type="datetime-local"
+            value={scheduledAt}
+            onChange={(e) => setScheduledAt(e.target.value)}
+            className="px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          />
+          <p className="text-xs text-zinc-500 mt-2">
+            文章将保存为草稿，在设定时间后自动发布。需要配置定时任务（CRON）才能生效。
+          </p>
+          {scheduledAt && (
+            <button
+              onClick={async () => {
+                await handleSave("DRAFT");
+              }}
+              disabled={saving}
+              className="mt-3 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50"
+            >
+              {saving ? "保存中..." : `保存并设定于 ${scheduledAt} 发布`}
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

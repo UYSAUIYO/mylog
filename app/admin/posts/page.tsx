@@ -10,6 +10,7 @@ interface Article {
   slug: string;
   status: "DRAFT" | "PUBLISHED" | "ARCHIVED";
   publishedAt: string | null;
+  scheduledAt: string | null;
   updatedAt: string;
   _count: { comments: number };
   categories: { category: { name: string } }[];
@@ -139,21 +140,28 @@ export default function AdminPostsPage() {
                     </Link>
                   </td>
                   <td className="px-4 py-3">
-                    <span
-                      className={`inline-block text-xs px-2 py-0.5 rounded-full ${
-                        article.status === "PUBLISHED"
-                          ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300"
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className={`inline-block text-xs px-2 py-0.5 rounded-full ${
+                          article.status === "PUBLISHED"
+                            ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300"
+                            : article.status === "DRAFT"
+                            ? "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-300"
+                            : "bg-zinc-100 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400"
+                        }`}
+                      >
+                        {article.status === "PUBLISHED"
+                          ? "已发布"
                           : article.status === "DRAFT"
-                          ? "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-300"
-                          : "bg-zinc-100 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400"
-                      }`}
-                    >
-                      {article.status === "PUBLISHED"
-                        ? "已发布"
-                        : article.status === "DRAFT"
-                        ? "草稿"
-                        : "已归档"}
-                    </span>
+                          ? "草稿"
+                          : "已归档"}
+                      </span>
+                      {article.status === "DRAFT" && article.scheduledAt && (
+                        <span className="inline-block text-xs px-2 py-0.5 rounded-full bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300">
+                          定时 {new Date(article.scheduledAt).toLocaleDateString("zh-CN", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-sm text-zinc-500">
                     {article.categories

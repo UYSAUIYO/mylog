@@ -47,6 +47,7 @@ model Article {
   wordCount      Int              @default(0) @map("word_count")
   allowComment   Boolean          @default(true) @map("allow_comment")
   isPinned       Boolean          @default(false) @map("is_pinned")
+  scheduledAt    DateTime?        @map("scheduled_at")
   seoTitle       String?          @map("seo_title") @db.VarChar(255)
   seoDescription String?          @map("seo_description") @db.Text
   ogImage        String?          @map("og_image") @db.VarChar(500)
@@ -57,6 +58,7 @@ model Article {
   tags           ArticleTag[]
   comments       Comment[]
   articleLikes   ArticleLike[]
+  seriesArticles SeriesArticle[]
 
   @@index([status])
   @@index([publishedAt])
@@ -185,4 +187,29 @@ enum StorageProvider {
   S3
   R2
   OSS
+}
+
+model Series {
+  id          Int             @id @default(autoincrement())
+  name        String          @db.VarChar(200)
+  slug        String          @unique @db.VarChar(200)
+  description String?         @db.Text
+  coverImage  String?         @map("cover_image") @db.VarChar(500)
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+  articles    SeriesArticle[]
+
+  @@map("series")
+}
+
+model SeriesArticle {
+  seriesId  Int      @map("series_id")
+  articleId Int      @map("article_id")
+  order     Int      @default(0)
+  series    Series   @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@id([seriesId, articleId])
+  @@index([seriesId, order])
+  @@map("series_articles")
 }

@@ -9,6 +9,7 @@ import GlassBadge from "@/components/glass/GlassBadge";
 import Link from "next/link";
 import ViewTracker from "@/components/ViewTracker";
 import ArticleStatsBar from "@/components/ArticleStatsBar";
+import SeriesNav from "@/components/SeriesNav";
 import { prisma } from "@/lib/prisma";
 
 interface PageProps {
@@ -166,6 +167,9 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* View count */}
             <ViewTracker slug={article.slug} />
+
+            {/* Series navigation */}
+            <SeriesNav articleId={article.id} />
 
             {/* 统计栏 */}
             <div className="mb-12">

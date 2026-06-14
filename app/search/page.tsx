@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import FeaturedPostCard from "@/components/home/FeaturedPostCard";
 import GlassCard from "@/components/glass/GlassCard";
@@ -22,6 +22,19 @@ interface Article {
 }
 
 export default function SearchPage() {
+  return (
+    <div className="max-w-7xl mx-auto px-6 py-8">
+      <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-6">
+        搜索文章
+      </h1>
+      <Suspense fallback={<div className="text-center py-24 text-zinc-400">加载中...</div>}>
+        <SearchContent />
+      </Suspense>
+    </div>
+  );
+}
+
+function SearchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const initialQ = searchParams.get("q") || "";
@@ -72,11 +85,7 @@ export default function SearchPage() {
   const totalPages = Math.ceil(total / 9);
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
-      <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-6">
-        搜索文章
-      </h1>
-
+    <>
       <form onSubmit={handleSubmit} className="mb-10">
         <GlassCard variant="md" diamond>
           <div className="flex items-center gap-3">
@@ -231,6 +240,6 @@ export default function SearchPage() {
           />
         </>
       )}
-    </div>
+    </>
   );
 }

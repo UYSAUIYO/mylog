@@ -94,6 +94,7 @@ export async function POST(request: NextRequest) {
       ogImage,
       canonicalUrl,
       allowComment: allowComment ?? true,
+      scheduledAt: body.scheduledAt ? new Date(body.scheduledAt) : undefined,
     });
 
     // If status is PUBLISHED, update it

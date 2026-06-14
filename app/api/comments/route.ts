@@ -54,9 +54,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate content length
-    if (content.length < 5 || content.length > 1000) {
+    if (content.length < 5 || content.length > 2000) {
       return NextResponse.json(
-        { error: "评论内容长度应在5-1000个字符之间" },
+        { error: "评论内容长度应在5-2000个字符之间" },
         { status: 400 }
       );
     }

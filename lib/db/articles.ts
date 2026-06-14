@@ -27,6 +27,7 @@ export interface CreateArticleInput {
   ogImage?: string;
   canonicalUrl?: string;
   allowComment?: boolean;
+  scheduledAt?: Date | null;
 }
 
 export interface UpdateArticleInput {
@@ -44,6 +45,7 @@ export interface UpdateArticleInput {
   canonicalUrl?: string;
   allowComment?: boolean;
   isPinned?: boolean;
+  scheduledAt?: Date | null;
 }
 
 const ARTICLE_INCLUDE = {
@@ -209,6 +211,7 @@ export async function updateArticle(
     updateData.status = "PUBLISHED";
     updateData.isPublished = true;
     updateData.publishedAt = updateData.publishedAt ?? new Date();
+    updateData.scheduledAt = null;
   } else if (status) {
     updateData.status = status;
     updateData.isPublished = false;
