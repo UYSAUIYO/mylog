@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
-import { PrismaClient } from "@/generated/prisma/client";
+import { Prisma, PrismaClient } from "@/generated/prisma/client";
 
 const adapter = new PrismaMariaDb({
   host: process.env.DATABASE_HOST || "localhost",
@@ -12,10 +12,27 @@ const adapter = new PrismaMariaDb({
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
+  prismaVersion: string | undefined;
 };
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient({ adapter });
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
+function createPrismaClient() {
+  return new PrismaClient({ adapter });
 }
+
+function getPrismaClient() {
+  if (process.env.NODE_ENV === "production") {
+    return globalForPrisma.prisma ?? createPrismaClient();
+  }
+  // Dev: invalidate cached client on schema change via version check
+  const currentVersion = Prisma.prismaVersion?.client ?? "";
+  if (globalForPrisma.prisma && globalForPrisma.prismaVersion !== currentVersion) {
+    globalForPrisma.prisma = undefined;
+  }
+  if (!globalForPrisma.prisma) {
+    globalForPrisma.prisma = createPrismaClient();
+    globalForPrisma.prismaVersion = currentVersion;
+  }
+  return globalForPrisma.prisma;
+}
+
+export const prisma = getPrismaClient();

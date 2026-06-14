@@ -80,6 +80,12 @@ export default function RootLayout({
                 >
                   专栏
                 </Link>
+                <Link
+                  href="/photos"
+                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+                >
+                  照片
+                </Link>
                 <a
                   href="/rss.xml"
                   target="_blank"
