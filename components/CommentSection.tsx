@@ -108,7 +108,7 @@ function CommentForm({
             type="text"
             value={authorName}
             onChange={(e) => setAuthorName(e.target.value)}
-            className="w-full px-3 py-1.5 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 sm:py-1.5 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="你的昵称"
             required
           />
@@ -124,7 +124,7 @@ function CommentForm({
             type="email"
             value={authorEmail}
             onChange={(e) => setAuthorEmail(e.target.value)}
-            className="w-full px-3 py-1.5 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 sm:py-1.5 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="your@email.com"
             required
           />
@@ -139,7 +139,7 @@ function CommentForm({
           type="url"
           value={authorWebsite}
           onChange={(e) => setAuthorWebsite(e.target.value)}
-          className="w-full px-3 py-1.5 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 sm:py-1.5 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="https://..."
         />
       </div>
@@ -208,11 +208,11 @@ function CommentForm({
         />
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <button
           type="submit"
           disabled={submitting}
-          className="px-4 py-1.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-100 disabled:opacity-40 transition-all active:scale-95"
+          className="w-full sm:w-auto px-4 py-2 sm:py-1.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-100 disabled:opacity-40 transition-all active:scale-95"
         >
           {submitting ? "提交中..." : "提交评论"}
         </button>
@@ -220,7 +220,7 @@ function CommentForm({
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-1.5 border border-zinc-300 dark:border-zinc-600 text-sm text-zinc-600 dark:text-zinc-400 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+            className="w-full sm:w-auto px-4 py-2 sm:py-1.5 border border-zinc-300 dark:border-zinc-600 text-sm text-zinc-600 dark:text-zinc-400 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
           >
             取消
           </button>
@@ -292,7 +292,7 @@ function CommentItem({
   return (
     <div className="group">
       <div className="flex gap-3">
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-sm font-medium text-zinc-600 dark:text-zinc-400">
+        <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-xs sm:text-sm font-medium text-zinc-600 dark:text-zinc-400">
           {comment.authorName.charAt(0).toUpperCase()}
         </div>
         <div className="flex-1 min-w-0">
@@ -346,7 +346,7 @@ function CommentItem({
 
           {/* Nested replies */}
           {comment.replies && comment.replies.length > 0 && (
-            <div className="mt-3 ml-2 pl-4 border-l-2 border-zinc-100 dark:border-zinc-800 space-y-3">
+            <div className="mt-2 sm:mt-3 ml-2 pl-3 sm:pl-4 border-l-2 border-zinc-100 dark:border-zinc-800 space-y-2 sm:space-y-3">
               {comment.replies.map((reply) => (
                 <CommentItem
                   key={reply.id}
@@ -391,7 +391,7 @@ export default function CommentSection({
 
   return (
     <div className="mt-12 pt-8 border-t border-zinc-200 dark:border-zinc-700">
-      <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-6">
+      <h2 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 sm:mb-6">
         评论 ({comments.length})
       </h2>
 
@@ -400,7 +400,7 @@ export default function CommentSection({
           {!showNewForm && (
             <button
               onClick={() => setShowNewForm(true)}
-              className="px-4 py-2 border border-zinc-300 dark:border-zinc-600 text-sm text-zinc-600 dark:text-zinc-400 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors mb-6"
+              className="w-full sm:w-auto px-4 py-2 border border-zinc-300 dark:border-zinc-600 text-sm text-zinc-600 dark:text-zinc-400 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors mb-4 sm:mb-6"
             >
               发表评论
             </button>
