@@ -107,7 +107,7 @@ export default async function ArticlePage({ params }: PageProps) {
           <main className="min-w-0">
             {/* 封面图——弱玻璃 */}
             {article.coverImage && (
-              <GlassCard variant="sm" className="mb-8 p-2 overflow-hidden">
+              <GlassCard variant="sm" className="mb-4 sm:mb-8 p-2 overflow-hidden">
                 <img
                   src={article.coverImage}
                   alt={article.title}
@@ -117,7 +117,7 @@ export default async function ArticlePage({ params }: PageProps) {
             )}
 
             {/* 元信息条 — 弱玻璃 + 菱形纹理 */}
-            <GlassCard variant="sm" diamond className="mb-8">
+            <GlassCard variant="sm" diamond className="mb-4 sm:mb-8">
               {article.categories.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mb-3">
                   {article.categories.map(({ category }) => (
@@ -131,11 +131,11 @@ export default async function ArticlePage({ params }: PageProps) {
                 </div>
               )}
 
-              <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-3 leading-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-3 leading-tight">
                 {article.title}
               </h1>
 
-              <div className="flex items-center gap-4 text-sm text-zinc-500 dark:text-zinc-400">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 text-sm text-zinc-500 dark:text-zinc-400">
                 {date && <time>{date}</time>}
                 {article.readingTime > 0 && (
                   <span>{article.readingTime} 分钟阅读</span>
@@ -159,7 +159,7 @@ export default async function ArticlePage({ params }: PageProps) {
             </GlassCard>
 
             {/* 正文 —— 极简 prose，高对比 */}
-            <div className="mb-12">
+            <div className="mb-6 sm:mb-12">
               <div className="prose prose-zinc dark:prose-invert max-w-none prose-headings:text-zinc-900 dark:prose-headings:text-zinc-50 prose-p:text-zinc-700 dark:prose-p:text-zinc-200 prose-strong:text-zinc-900 dark:prose-strong:text-zinc-50 prose-code:text-zinc-800 dark:prose-code:text-zinc-200">
                 <MarkdownRenderer content={article.content} />
               </div>
@@ -172,7 +172,7 @@ export default async function ArticlePage({ params }: PageProps) {
             <SeriesNav articleId={article.id} />
 
             {/* 统计栏 */}
-            <div className="mb-12">
+            <div className="mb-6 sm:mb-12">
               <ArticleStatsBar slug={article.slug} />
             </div>
 
