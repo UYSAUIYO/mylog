@@ -225,3 +225,38 @@ model Photo {
 
   @@map("photos")
 }
+
+model Page {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  slug        String   @unique @db.VarChar(255)
+  content     String   @db.LongText
+  isPublished Boolean  @default(true) @map("is_published")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("pages")
+}
+
+model Note {
+  id        Int      @id @default(autoincrement())
+  content   String   @db.Text
+  images    String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("notes")
+}
+
+model FriendLink {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(100)
+  url         String   @db.VarChar(500)
+  description String?  @db.VarChar(255)
+  icon        String?  @db.VarChar(500)
+  category    String?  @db.VarChar(50)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("friend_links")
+}

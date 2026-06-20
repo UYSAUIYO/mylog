@@ -11,6 +11,8 @@ import ViewTracker from "@/components/ViewTracker";
 import ArticleStatsBar from "@/components/ArticleStatsBar";
 import SeriesNav from "@/components/SeriesNav";
 import { prisma } from "@/lib/prisma";
+import ReadingProgress from "@/components/ReadingProgress";
+import RelatedArticles from "@/components/RelatedArticles";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -88,6 +90,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
   return (
     <div>
+      <ReadingProgress />
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* JSON-LD */}
         <script
@@ -170,6 +173,13 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* Series navigation */}
             <SeriesNav articleId={article.id} />
+
+            {/* Related articles */}
+            <RelatedArticles
+              articleId={article.id}
+              tagIds={article.tags.map((t) => t.tag.id)}
+              categoryIds={article.categories.map((c) => c.category.id)}
+            />
 
             {/* 统计栏 */}
             <div className="mb-6 sm:mb-12">

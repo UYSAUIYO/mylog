@@ -19,6 +19,29 @@ interface Article {
   categories: { category: { name: string; slug: string } }[];
   tags: { tag: { name: string; slug: string } }[];
   _count: { comments: number };
+  snippet: string | null;
+}
+
+/**
+ * Highlight matching keywords in text by wrapping them with <mark> tags.
+ */
+function highlightText(text: string, query: string) {
+  if (!query.trim()) return text;
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(`(${escaped})`, "gi");
+  const parts = text.split(regex);
+  return parts.map((part, i) =>
+    regex.test(part) ? (
+      <mark
+        key={i}
+        className="bg-yellow-200/80 dark:bg-yellow-500/30 text-zinc-900 dark:text-zinc-100 rounded-sm px-0.5"
+      >
+        {part}
+      </mark>
+    ) : (
+      part
+    )
+  );
 }
 
 export default function SearchPage() {
@@ -215,20 +238,29 @@ function SearchContent() {
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {articles.map((article) => (
-              <FeaturedPostCard
-                key={article.id}
-                title={article.title}
-                slug={article.slug}
-                excerpt={article.excerpt || undefined}
-                coverImage={article.coverImage || undefined}
-                publishedAt={article.publishedAt || undefined}
-                readingTime={article.readingTime}
-                viewCount={article.viewCount}
-                commentCount={article._count.comments}
-                isPinned={article.isPinned}
-                categories={article.categories}
-                tags={article.tags}
-              />
+              <div key={article.id}>
+                <FeaturedPostCard
+                  title={article.title}
+                  slug={article.slug}
+                  excerpt={article.excerpt || undefined}
+                  coverImage={article.coverImage || undefined}
+                  publishedAt={article.publishedAt || undefined}
+                  readingTime={article.readingTime}
+                  viewCount={article.viewCount}
+                  commentCount={article._count.comments}
+                  isPinned={article.isPinned}
+                  categories={article.categories}
+                  tags={article.tags}
+                />
+                {/* Snippet preview with highlighting */}
+                {article.snippet && (
+                  <div className="mt-2 px-4 py-2.5 rounded-xl bg-white/40 dark:bg-zinc-800/30 backdrop-blur-sm border border-white/20 dark:border-zinc-700/30">
+                    <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed line-clamp-3">
+                      {highlightText(article.snippet, query)}
+                    </p>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 

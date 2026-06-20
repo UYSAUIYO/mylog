@@ -86,6 +86,24 @@ export default function RootLayout({
                 >
                   照片
                 </Link>
+                <Link
+                  href="/notes"
+                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+                >
+                  动态
+                </Link>
+                <Link
+                  href="/links"
+                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+                >
+                  友链
+                </Link>
+                <Link
+                  href="/about"
+                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+                >
+                  关于
+                </Link>
                 <a
                   href="/rss.xml"
                   target="_blank"
