@@ -31,21 +31,25 @@ export default function AboutPage() {
       {/* Hero */}
       <section className="mb-16 text-center">
         <div className="relative inline-block mb-6">
-          <div className="w-28 h-28 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-[3px] mx-auto">
+          {/* 外层光环 */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 blur-xl opacity-30 animate-pulse" />
+          {/* 头像容器 */}
+          <div className="relative w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 via-blue-600 to-black p-[3px] mx-auto">
             <div className="w-full h-full rounded-full bg-zinc-50 dark:bg-zinc-950 flex items-center justify-center">
-              <span className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="text-5xl font-black bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700 bg-clip-text text-transparent">
                 Y
               </span>
             </div>
           </div>
-          <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-green-400 dark:bg-green-500 border-4 border-zinc-50 dark:border-zinc-950 flex items-center justify-center">
-            <span className="text-xs">👋</span>
+          {/* 在线状态 */}
+          <div className="absolute -bottom-1 -right-1 w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 border-4 border-zinc-50 dark:border-zinc-950 flex items-center justify-center shadow-lg shadow-blue-500/30">
+            <span className="text-sm">👋</span>
           </div>
         </div>
 
         <h1 className="text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-3">
           Hi, 我是{" "}
-          <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-blue-500 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
             YUWEN
           </span>
         </h1>
@@ -61,10 +65,10 @@ export default function AboutPage() {
       {/* About */}
       <section className="mb-16">
         <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-5 flex items-center gap-2">
-          <span className="w-1.5 h-5 rounded-full bg-gradient-to-b from-blue-500 to-purple-500" />
+          <span className="w-1.5 h-5 rounded-full bg-gradient-to-b from-blue-500 to-blue-700" />
           关于我
         </h2>
-        <GlassCard variant="md" diamond glow>
+        <GlassCard variant="md" diamond glow glowColor="rgba(59, 130, 246, 0.15)" glowDarkColor="rgba(59, 130, 246, 0.2)">
           <div className="space-y-4 text-zinc-700 dark:text-zinc-300 leading-relaxed text-[15px]">
             <p>
               我是一名热衷于底层技术的嵌入式工程师，日常与 MCU、寄存器和示波器打交道，
@@ -73,7 +77,7 @@ export default function AboutPage() {
             <p>
               这个博客是我的技术沉淀空间 —— 从 STM32 驱动开发到芯片手册深度解读，
               从 AI Agent 的探索实践到前端工程的最佳实践。我相信，
-              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+              <span className="font-medium text-blue-600 dark:text-blue-400">
                 写下来才是真正理解的开始
               </span>
               。
@@ -89,12 +93,12 @@ export default function AboutPage() {
       {/* Tech Stack */}
       <section className="mb-16">
         <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-5 flex items-center gap-2">
-          <span className="w-1.5 h-5 rounded-full bg-gradient-to-b from-purple-500 to-pink-500" />
+          <span className="w-1.5 h-5 rounded-full bg-gradient-to-b from-blue-500 to-cyan-500" />
           技术栈
         </h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {techStack.map((tech) => (
-            <GlassCard key={tech.name} variant="sm" hover>
+            <GlassCard key={tech.name} variant="sm" hover glow glowColor="rgba(59, 130, 246, 0.1)" glowDarkColor="rgba(59, 130, 246, 0.15)">
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{tech.icon}</span>
                 <div>
@@ -114,14 +118,14 @@ export default function AboutPage() {
       {/* Interests */}
       <section className="mb-16">
         <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-5 flex items-center gap-2">
-          <span className="w-1.5 h-5 rounded-full bg-gradient-to-b from-pink-500 to-orange-500" />
+          <span className="w-1.5 h-5 rounded-full bg-gradient-to-b from-cyan-500 to-blue-500" />
           兴趣领域
         </h2>
         <div className="flex flex-wrap gap-3">
           {interests.map((item) => (
             <div
               key={item.label}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/40 dark:bg-zinc-800/40 backdrop-blur-sm border border-white/40 dark:border-zinc-700/40 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-white/60 dark:hover:bg-zinc-700/60 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 backdrop-blur-sm border border-blue-500/20 dark:border-blue-400/30 text-sm text-zinc-700 dark:text-zinc-300 hover:from-blue-500/20 hover:to-cyan-500/20 dark:hover:from-blue-500/30 dark:hover:to-cyan-500/30 transition-all cursor-default"
             >
               <span>{item.emoji}</span>
               {item.label}
@@ -133,18 +137,19 @@ export default function AboutPage() {
       {/* Stats */}
       <section className="mb-16">
         <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-5 flex items-center gap-2">
-          <span className="w-1.5 h-5 rounded-full bg-gradient-to-b from-orange-500 to-yellow-500" />
+          <span className="w-1.5 h-5 rounded-full bg-gradient-to-b from-blue-600 to-black" />
           博客数据
         </h2>
         <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
           {[
-            { label: "技术文章", value: "持续更新" },
-            { label: "专栏系列", value: "深度整理" },
-            { label: "代码提交", value: "日常迭代" },
-            { label: "建站时长", value: "Since 2024" },
+            { label: "技术文章", value: "持续更新", icon: "📝" },
+            { label: "专栏系列", value: "深度整理", icon: "📚" },
+            { label: "代码提交", value: "日常迭代", icon: "💻" },
+            { label: "建站时长", value: "Since 2024", icon: "🕐" },
           ].map((stat) => (
-            <GlassCard key={stat.label} variant="sm" className="text-center">
-              <div className="text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-1">
+            <GlassCard key={stat.label} variant="sm" className="text-center group">
+              <div className="text-2xl mb-2 group-hover:scale-110 transition-transform">{stat.icon}</div>
+              <div className="text-lg font-bold bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent mb-1">
                 {stat.value}
               </div>
               <div className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -158,10 +163,10 @@ export default function AboutPage() {
       {/* Contact */}
       <section className="mb-16">
         <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-5 flex items-center gap-2">
-          <span className="w-1.5 h-5 rounded-full bg-gradient-to-b from-yellow-500 to-green-500" />
+          <span className="w-1.5 h-5 rounded-full bg-gradient-to-b from-black to-blue-500" />
           联系方式
         </h2>
-        <GlassCard variant="md">
+        <GlassCard variant="md" glow glowColor="rgba(59, 130, 246, 0.1)" glowDarkColor="rgba(59, 130, 246, 0.15)">
           <div className="flex flex-wrap items-center gap-4">
             <ContactLink
               href="mailto:yuwen@example.com"
@@ -192,7 +197,7 @@ export default function AboutPage() {
             />
             <Link
               href="/links"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -233,7 +238,7 @@ function ContactLink({
       href={href}
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
-      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all"
+      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all"
     >
       {icon}
       {label}
