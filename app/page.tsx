@@ -71,7 +71,7 @@ export default async function HomePage({
       <div className="max-w-7xl mx-auto px-6 pb-16">
         {/* 最近更新 - 横向光带 */}
         {recentArticles.length > 0 && (
-          <section className="mb-16">
+          <section className="mb-8 sm:mb-16">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">
                 最近更新
@@ -106,7 +106,7 @@ export default async function HomePage({
         )}
 
         {/* 主区域 */}
-        <div className="grid grid-cols-1 lg:grid-cols-[240px_minmax(0,1fr)] gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-[240px_minmax(0,1fr)] gap-6 sm:gap-10">
           {/* 左侧：TopicCloud */}
           <aside className="hidden lg:block">
             <div className="sticky top-20 space-y-6">
@@ -118,7 +118,7 @@ export default async function HomePage({
           <div className="min-w-0">
             {/* 精选文章 */}
             {pinnedArticles.length > 0 && (
-              <section className="mb-12">
+              <section className="mb-6 sm:mb-12">
                 <h2 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200 mb-6">
                   精选文章
                 </h2>

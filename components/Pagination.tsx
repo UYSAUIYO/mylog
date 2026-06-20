@@ -40,11 +40,11 @@ export default function Pagination({
   }
 
   return (
-    <nav className="flex items-center justify-center gap-1 mt-8">
+    <nav className="flex items-center justify-center gap-1 mt-6 sm:mt-8">
       {currentPage > 1 && (
         <Link
           href={buildUrl(currentPage - 1)}
-          className="px-3 py-1.5 text-sm border border-zinc-300 dark:border-zinc-600 rounded-lg text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+          className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm border border-zinc-300 dark:border-zinc-600 rounded-lg text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
         >
           上一页
         </Link>
@@ -62,7 +62,7 @@ export default function Pagination({
           <Link
             key={page}
             href={buildUrl(page)}
-            className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+            className={`px-2 sm:px-3 py-1.5 text-xs sm:text-sm rounded-lg transition-colors ${
               page === currentPage
                 ? "bg-blue-600 text-white"
                 : "border border-zinc-300 dark:border-zinc-600 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800"
@@ -76,7 +76,7 @@ export default function Pagination({
       {currentPage < totalPages && (
         <Link
           href={buildUrl(currentPage + 1)}
-          className="px-3 py-1.5 text-sm border border-zinc-300 dark:border-zinc-600 rounded-lg text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+          className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm border border-zinc-300 dark:border-zinc-600 rounded-lg text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
         >
           下一页
         </Link>
