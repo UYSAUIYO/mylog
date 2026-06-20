@@ -8,12 +8,12 @@ export const metadata: Metadata = {
 };
 
 const techStack = [
-  { name: "C/C++", desc: "嵌入式系统开发", icon: "⚡" },
-  { name: "STM32/ARM", desc: "MCU 与 SoC 开发", icon: "🔧" },
-  { name: "Python", desc: "脚本工具 & AI 应用", icon: "🐍" },
-  { name: "TypeScript", desc: "前端工程 & 全栈开发", icon: "🎨" },
-  { name: "Linux", desc: "驱动开发与系统调试", icon: "🐧" },
-  { name: "AI Agent", desc: "大模型应用与 RAG", icon: "🤖" },
+  { name: "C/C++", desc: "吃饭的家伙", icon: "⚡" },
+  { name: "STM32/ARM", desc: "天天打交道", icon: "🔧" },
+  { name: "Python", desc: "写脚本、搞AI", icon: "🐍" },
+  { name: "TypeScript", desc: "前端整活", icon: "🎨" },
+  { name: "Linux", desc: "驱动和调试", icon: "🐧" },
+  { name: "AI Agent", desc: "在研究", icon: "🤖" },
 ];
 
 const interests = [
@@ -54,11 +54,10 @@ export default function AboutPage() {
           </span>
         </h1>
         <p className="text-lg text-zinc-500 dark:text-zinc-400 mb-4 max-w-xl mx-auto leading-relaxed">
-          嵌入式工程师 / 技术博主 / 终身学习者
+          写代码的，偶尔也写点字
         </p>
         <p className="text-sm text-zinc-400 dark:text-zinc-500 max-w-lg mx-auto leading-relaxed">
-          专注于嵌入式开发、芯片手册解读、AI Agent 探索与前端工程实践。
-          在这里记录技术思考，分享踩坑经验，构建个人知识体系。
+          白天调板子，晚上敲键盘。记录一些踩过的坑和想过的事。
         </p>
       </section>
 
@@ -71,20 +70,15 @@ export default function AboutPage() {
         <GlassCard variant="md" diamond glow glowColor="rgba(59, 130, 246, 0.15)" glowDarkColor="rgba(59, 130, 246, 0.2)">
           <div className="space-y-4 text-zinc-700 dark:text-zinc-300 leading-relaxed text-[15px]">
             <p>
-              我是一名热衷于底层技术的嵌入式工程师，日常与 MCU、寄存器和示波器打交道，
-              同时也热爱前端开发，享受从零搭建系统的过程。
+              做嵌入式的，大部分时间在跟寄存器和 datasheet 较劲。偶尔也搞搞前端，
+              纯粹是因为觉得从底层到 UI 都自己搞定这件事挺酷的。
             </p>
             <p>
-              这个博客是我的技术沉淀空间 —— 从 STM32 驱动开发到芯片手册深度解读，
-              从 AI Agent 的探索实践到前端工程的最佳实践。我相信，
-              <span className="font-medium text-blue-600 dark:text-blue-400">
-                写下来才是真正理解的开始
-              </span>
-              。
+              写博客没别的原因，就是怕自己忘了。有些坑踩完不记下来，过俩月再遇到还得重新踩一遍，
+              那就太蠢了。顺便也能帮到同样在折腾的人。
             </p>
             <p>
-              工作之余，我喜欢研究开源硬件项目、尝试新技术栈、用摄影记录生活。
-              如果你也对技术充满好奇，欢迎一起交流！
+              不写代码的时候喜欢拍拍照、看看开源硬件项目。有啥想聊的随时找我。
             </p>
           </div>
         </GlassCard>
@@ -142,10 +136,10 @@ export default function AboutPage() {
         </h2>
         <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
           {[
-            { label: "技术文章", value: "持续更新", icon: "📝" },
-            { label: "专栏系列", value: "深度整理", icon: "📚" },
-            { label: "代码提交", value: "日常迭代", icon: "💻" },
-            { label: "建站时长", value: "Since 2024", icon: "🕐" },
+            { label: "技术文章", value: "几十篇", icon: "📝" },
+            { label: "专栏系列", value: "几个", icon: "📚" },
+            { label: "踩过的坑", value: "数不清", icon: "💻" },
+            { label: "建站", value: "2024起", icon: "🕐" },
           ].map((stat) => (
             <GlassCard key={stat.label} variant="sm" className="text-center group">
               <div className="text-2xl mb-2 group-hover:scale-110 transition-transform">{stat.icon}</div>
@@ -212,10 +206,10 @@ export default function AboutPage() {
       <div className="text-center pb-8">
         <GlassCard variant="sm" className="inline-block">
           <p className="text-sm text-zinc-500 dark:text-zinc-400 italic">
-            &ldquo;代码是写给人看的，顺便能在机器上运行。&rdquo;
+            &ldquo;先让它跑起来，再让它跑得快，最后让它跑得优雅。&rdquo;
           </p>
           <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-1 text-right">
-            — Harold Abelson
+            — 某位不知名程序员
           </p>
         </GlassCard>
       </div>
