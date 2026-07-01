@@ -4,9 +4,7 @@ import MarkdownRenderer from "@/components/MarkdownRenderer";
 import CommentSection from "@/components/CommentSection";
 import TableOfContents from "@/components/TableOfContents";
 import CategoryTree from "@/components/CategoryTree";
-import GlassCard from "@/components/glass/GlassCard";
 import GlassBadge from "@/components/glass/GlassBadge";
-import Link from "next/link";
 import ViewTracker from "@/components/ViewTracker";
 import ArticleStatsBar from "@/components/ArticleStatsBar";
 import SeriesNav from "@/components/SeriesNav";
@@ -70,8 +68,8 @@ export default async function ArticlePage({ params }: PageProps) {
   const date = article.publishedAt
     ? new Date(article.publishedAt).toLocaleDateString("zh-CN", {
         year: "numeric",
-        month: "long",
-        day: "numeric",
+        month: "2-digit",
+        day: "2-digit",
       })
     : null;
 
@@ -91,116 +89,103 @@ export default async function ArticlePage({ params }: PageProps) {
   return (
     <div>
       <ReadingProgress />
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* JSON-LD */}
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-[220px_minmax(0,1fr)] xl:grid-cols-[220px_minmax(0,1fr)_200px] gap-8">
-          {/* 左侧分类导航 */}
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[210px_minmax(0,1fr)] xl:grid-cols-[210px_minmax(0,1fr)_220px]">
           <aside className="hidden lg:block">
-            <div className="sticky top-20">
+            <div className="sticky top-24 space-y-8">
+              <div className="border-y border-zinc-300/80 py-4 text-xs uppercase tracking-[0.18em] text-zinc-500 dark:border-zinc-800 dark:text-zinc-500">
+                <div className="mb-3 font-semibold text-zinc-950 dark:text-zinc-50">Article</div>
+                {date && <div className="font-mono tracking-normal">{date}</div>}
+                {article.readingTime > 0 && <div className="mt-2 tracking-normal">{article.readingTime} min read</div>}
+                <div className="mt-2 tracking-normal">{article.viewCount} views</div>
+              </div>
               <CategoryTree />
             </div>
           </aside>
 
-          {/* 中间正文 */}
           <main className="min-w-0">
-            {/* 封面图——弱玻璃 */}
-            {article.coverImage && (
-              <GlassCard variant="sm" className="mb-4 sm:mb-8 p-2 overflow-hidden">
-                <img
-                  src={article.coverImage}
-                  alt={article.title}
-                  className="w-full rounded-lg"
-                />
-              </GlassCard>
-            )}
+            <header className="mb-10 border-b border-zinc-300/80 pb-8 dark:border-zinc-800">
+              <div className="mb-5 flex flex-wrap gap-2">
+                {article.categories.map(({ category }) => (
+                  <GlassBadge key={category.slug} href={`/categories/${category.slug}`}>
+                    {category.name}
+                  </GlassBadge>
+                ))}
+              </div>
 
-            {/* 元信息条 — 弱玻璃 + 菱形纹理 */}
-            <GlassCard variant="sm" diamond className="mb-4 sm:mb-8">
-              {article.categories.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mb-3">
-                  {article.categories.map(({ category }) => (
-                    <GlassBadge
-                      key={category.slug}
-                      href={`/categories/${category.slug}`}
-                    >
-                      {category.name}
+              <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-blue-600 dark:text-blue-400">
+                Journal Article
+              </p>
+              <h1 className="max-w-4xl text-4xl font-black leading-[1.02] tracking-[-0.06em] text-zinc-950 dark:text-zinc-50 sm:text-5xl lg:text-6xl">
+                {article.title}
+              </h1>
+
+              {article.excerpt && (
+                <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-600 dark:text-zinc-300">
+                  {article.excerpt}
+                </p>
+              )}
+
+              <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500 dark:text-zinc-500">
+                {date && <time className="font-mono tracking-normal">{date}</time>}
+                {article.readingTime > 0 && <span>{article.readingTime} min</span>}
+                <span>{article.viewCount} views</span>
+              </div>
+
+              {article.tags.length > 0 && (
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {article.tags.map(({ tag }) => (
+                    <GlassBadge key={tag.slug} href={`/tags/${tag.slug}`}>
+                      {tag.name}
                     </GlassBadge>
                   ))}
                 </div>
               )}
+            </header>
 
-              <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-3 leading-tight">
-                {article.title}
-              </h1>
-
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 text-sm text-zinc-500 dark:text-zinc-400">
-                {date && <time>{date}</time>}
-                {article.readingTime > 0 && (
-                  <span>{article.readingTime} 分钟阅读</span>
-                )}
-                <span>{article.viewCount} 次浏览</span>
+            {article.coverImage && (
+              <div className="mb-10 border border-zinc-300/80 bg-[#fbfaf7] p-2 dark:border-zinc-800 dark:bg-zinc-950">
+                <img
+                  src={article.coverImage}
+                  alt={article.title}
+                  className="w-full grayscale"
+                />
               </div>
+            )}
 
-              {article.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-3">
-                  {article.tags.map(({ tag }) => (
-                    <Link
-                      key={tag.slug}
-                      href={`/tags/${tag.slug}`}
-                      className="text-xs px-2.5 py-0.5 rounded-full bg-white/15 dark:bg-zinc-800/30 border border-white/30 dark:border-zinc-700/50 text-zinc-500 dark:text-zinc-400 hover:bg-white/25 dark:hover:bg-zinc-700/50 transition-all"
-                    >
-                      #{tag.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </GlassCard>
-
-            {/* 正文 —— 极简 prose，高对比 */}
-            <div className="mb-6 sm:mb-12">
-              <div className="prose prose-zinc dark:prose-invert max-w-none prose-headings:text-zinc-900 dark:prose-headings:text-zinc-50 prose-p:text-zinc-700 dark:prose-p:text-zinc-200 prose-strong:text-zinc-900 dark:prose-strong:text-zinc-50 prose-code:text-zinc-800 dark:prose-code:text-zinc-200">
+            <article className="mb-12">
+              <div className="prose prose-zinc max-w-[76ch] dark:prose-invert prose-headings:scroll-mt-24 prose-headings:text-zinc-950 dark:prose-headings:text-zinc-50 prose-p:text-zinc-700 dark:prose-p:text-zinc-200 prose-strong:text-zinc-950 dark:prose-strong:text-zinc-50 prose-li:text-zinc-700 dark:prose-li:text-zinc-200">
                 <MarkdownRenderer content={article.content} />
               </div>
-            </div>
+            </article>
 
-            {/* View count */}
             <ViewTracker slug={article.slug} />
 
-            {/* Series navigation */}
-            <SeriesNav articleId={article.id} />
-
-            {/* Related articles */}
-            <RelatedArticles
-              articleId={article.id}
-              tagIds={article.tags.map((t) => t.tag.id)}
-              categoryIds={article.categories.map((c) => c.category.id)}
-            />
-
-            {/* 统计栏 */}
-            <div className="mb-6 sm:mb-12">
+            <div className="space-y-8 border-t border-zinc-300/80 pt-8 dark:border-zinc-800">
+              <SeriesNav articleId={article.id} />
+              <RelatedArticles
+                articleId={article.id}
+                tagIds={article.tags.map((t) => t.tag.id)}
+                categoryIds={article.categories.map((c) => c.category.id)}
+              />
               <ArticleStatsBar slug={article.slug} />
-            </div>
-
-            {/* Comments */}
-            <div id="comments">
-            <CommentSection
-              articleId={article.id}
-              allowComment={article.allowComment}
-            />
+              <div id="comments">
+                <CommentSection
+                  articleId={article.id}
+                  allowComment={article.allowComment}
+                />
+              </div>
             </div>
           </main>
 
-          {/* 右侧文章目录 */}
           <aside className="hidden xl:block">
-            <div className="sticky top-20">
-              <GlassCard variant="sm">
-                <TableOfContents content={article.content} />
-              </GlassCard>
+            <div className="sticky top-24">
+              <TableOfContents content={article.content} />
             </div>
           </aside>
         </div>

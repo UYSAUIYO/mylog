@@ -37,7 +37,7 @@ export default function ReadingProgress() {
       {/* Progress bar */}
       <div className="fixed top-0 left-0 right-0 z-[60] h-[3px] pointer-events-none">
         <div
-          className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-[width] duration-100 ease-out"
+          className="h-full bg-blue-600 transition-[width] duration-100 ease-out dark:bg-blue-400"
           style={{ width: `${progress}%`, opacity: progress >= 99 ? 0 : 1 }}
         />
       </div>
@@ -46,7 +46,7 @@ export default function ReadingProgress() {
       <button
         onClick={scrollToTop}
         aria-label="返回顶部"
-        className={`fixed bottom-8 right-8 z-50 w-10 h-10 rounded-full bg-zinc-900/80 dark:bg-zinc-100/80 backdrop-blur-md text-white dark:text-zinc-900 shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 ${
+        className={`fixed bottom-5 right-5 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-zinc-950/85 text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-105 dark:bg-zinc-100/85 dark:text-zinc-950 sm:bottom-8 sm:right-8 ${
           showTop
             ? "opacity-100 translate-y-0"
             : "opacity-0 translate-y-4 pointer-events-none"

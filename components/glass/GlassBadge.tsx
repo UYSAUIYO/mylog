@@ -16,12 +16,12 @@ export default function GlassBadge({
 }: GlassBadgeProps) {
   const base =
     size === "sm"
-      ? "inline-flex items-center text-xs px-2.5 py-0.5 rounded-full backdrop-blur-md border transition-all duration-200"
-      : "inline-flex items-center text-sm px-3 py-1 rounded-full backdrop-blur-md border transition-all duration-200";
+      ? "inline-flex items-center border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] transition-colors"
+      : "inline-flex items-center border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.18em] transition-colors";
 
   const activeStyle = active
-    ? "bg-blue-500/20 border-blue-400/40 text-blue-700 dark:text-blue-300"
-    : "bg-white/20 dark:bg-zinc-800/30 border-white/30 dark:border-zinc-700/50 text-zinc-600 dark:text-zinc-400 hover:bg-white/30 dark:hover:bg-zinc-700/50 hover:border-white/50 dark:hover:border-zinc-600/60";
+    ? "border-blue-600 bg-blue-600 text-white dark:border-blue-400 dark:bg-blue-400 dark:text-zinc-950"
+    : "border-zinc-300 bg-transparent text-zinc-500 hover:border-zinc-950 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-300 dark:hover:text-zinc-100";
 
   const classes = `${base} ${activeStyle}`;
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import GlassCard from "@/components/glass/GlassCard";
+import GlassBadge from "@/components/glass/GlassBadge";
 import { prisma } from "@/lib/prisma";
 
 async function getCategoriesWithCount() {
@@ -25,7 +25,7 @@ async function getTagsWithCount() {
         },
       },
     },
-    take: 20,
+    take: 24,
   });
 }
 
@@ -36,59 +36,54 @@ export default async function TopicCloud() {
   ]);
 
   return (
-    <GlassCard variant="sm" className="space-y-6">
-      {/* 分类 */}
-      <div>
-        <h4 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-3">
-          分类
-        </h4>
-        <ul className="space-y-0.5">
-          <li>
-            <Link
-              href="/"
-              className="flex items-center justify-between py-1.5 px-2 -mx-2 rounded-lg text-sm text-zinc-600 dark:text-zinc-400 hover:bg-white/20 dark:hover:bg-zinc-700/30 transition-colors"
-            >
-              全部文章
-            </Link>
-          </li>
-          {categories.map((cat) => (
-            <li key={cat.slug}>
-              <Link
-                href={`/categories/${cat.slug}`}
-                className="flex items-center justify-between py-1.5 px-2 -mx-2 rounded-lg text-sm text-zinc-600 dark:text-zinc-400 hover:bg-white/20 dark:hover:bg-zinc-700/30 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
-              >
-                <span>{cat.name}</span>
-                {cat._count.articles > 0 && (
-                  <span className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
-                    {cat._count.articles}
-                  </span>
-                )}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <section className="border-t border-zinc-300/80 pt-8 dark:border-zinc-800">
+      <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)]">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-400 dark:text-zinc-600">
+            Topics Index
+          </p>
+          <h2 className="mt-2 text-2xl font-black tracking-[-0.04em] text-zinc-950 dark:text-zinc-50">
+            分类与标签
+          </h2>
+        </div>
 
-      {/* 标签云 */}
-      <div>
-        <h4 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-3">
-          标签
-        </h4>
-        <div className="flex flex-wrap gap-1.5">
-          {tags.map((tag) => (
-            <Link
-              key={tag.slug}
-              href={`/tags/${tag.slug}`}
-              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs bg-white/20 dark:bg-zinc-800/30 border border-white/30 dark:border-zinc-700/50 text-zinc-500 dark:text-zinc-400 hover:bg-white/30 dark:hover:bg-zinc-700/50 hover:border-white/50 dark:hover:border-zinc-600/60 hover:text-zinc-700 dark:hover:text-zinc-300 transition-all"
-            >
-              {tag.name}
-              <span className="text-zinc-400 dark:text-zinc-500">
-                {tag._count.articles}
-              </span>
-            </Link>
-          ))}
+        <div className="grid gap-6 md:grid-cols-2">
+          <div>
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-500">
+              Categories
+            </h3>
+            <div className="divide-y divide-zinc-300/80 border-y border-zinc-300/80 dark:divide-zinc-800 dark:border-zinc-800">
+              <Link href="/" className="flex items-center justify-between py-2 text-sm text-zinc-700 transition-colors hover:text-blue-600 dark:text-zinc-300 dark:hover:text-blue-400">
+                <span>全部文章</span>
+                <span className="font-mono text-xs text-zinc-400">ALL</span>
+              </Link>
+              {categories.map((cat) => (
+                <Link
+                  key={cat.slug}
+                  href={`/categories/${cat.slug}`}
+                  className="flex items-center justify-between py-2 text-sm text-zinc-700 transition-colors hover:text-blue-600 dark:text-zinc-300 dark:hover:text-blue-400"
+                >
+                  <span>{cat.name}</span>
+                  <span className="font-mono text-xs text-zinc-400">{cat._count.articles}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-500">
+              Tags
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <GlassBadge key={tag.slug} href={`/tags/${tag.slug}`}>
+                  {tag.name} · {tag._count.articles}
+                </GlassBadge>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-    </GlassCard>
+    </section>
   );
 }

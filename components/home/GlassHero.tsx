@@ -1,49 +1,72 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import GlassCard from "@/components/glass/GlassCard";
+
+const Hero3DScene = dynamic(() => import("@/components/home/Hero3DScene"), {
+  ssr: false,
+});
 
 export default function GlassHero() {
   return (
-    <section className="relative overflow-hidden">
-      {/* 背景光晕 */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/10 dark:bg-blue-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-purple-400/10 dark:bg-purple-500/5 rounded-full blur-3xl" />
-      </div>
+    <section className="border-b border-zinc-300/80 dark:border-zinc-800">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:py-28">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
+          <div>
+            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.28em] text-blue-600 dark:text-blue-400">
+              Independent Tech Journal
+            </p>
+            <h1 className="max-w-4xl text-5xl font-black leading-[0.95] tracking-[-0.07em] text-zinc-950 dark:text-zinc-50 sm:text-7xl lg:text-8xl">
+              YUWEN.LOG
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-zinc-700 dark:text-zinc-300 sm:text-xl sm:leading-9">
+              写代码，也记录踩坑。这里是关于嵌入式、前端工程、AI Agent 和折腾项目的个人技术刊物。
+            </p>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-20 md:py-28">
-        <GlassCard
-          variant="hero"
-          diamond
-          className="text-center max-w-3xl mx-auto"
-        >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-            YUWEN
-            <span className="block mt-2 text-xl sm:text-2xl md:text-3xl font-normal text-zinc-500 dark:text-zinc-400">
-              个人技术知识库
-            </span>
-          </h1>
-          <p className="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-xl mx-auto">
-            嵌入式开发 · 芯片手册 · AI Agent · 前端工程
-            <br />
-            记录技术探索的每一步，构建可复用的知识体系。
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 mt-6 sm:mt-8">
-            <Link
-              href="/search"
-              className="inline-flex items-center justify-center px-5 py-2.5 bg-zinc-900/80 dark:bg-white/90 text-white dark:text-zinc-900 text-sm font-medium rounded-xl backdrop-blur-sm hover:opacity-80 transition-opacity w-full sm:w-auto"
-            >
-              探索知识库
-            </Link>
-            <a
-              href="/rss.xml"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-5 py-2.5 bg-white/20 dark:bg-zinc-800/40 border border-white/30 dark:border-zinc-700/50 text-zinc-700 dark:text-zinc-300 text-sm font-medium rounded-xl backdrop-blur-sm hover:bg-white/30 dark:hover:bg-zinc-700/50 transition-colors w-full sm:w-auto"
-            >
-              RSS 订阅
-            </a>
+            <div className="relative mt-10 hidden h-[280px] max-w-3xl overflow-hidden border border-zinc-300/80 bg-[#fbfaf7] dark:border-zinc-800 dark:bg-zinc-950 sm:block lg:h-[320px]">
+              <div className="absolute left-4 top-4 z-10 text-[10px] font-semibold uppercase tracking-[0.22em] text-zinc-400 dark:text-zinc-600">
+                3D Core / Live
+              </div>
+              <div className="absolute bottom-4 right-4 z-10 font-mono text-[10px] uppercase text-zinc-400 dark:text-zinc-600">
+                R3F.01
+              </div>
+              <Hero3DScene />
+            </div>
           </div>
-        </GlassCard>
+
+          <div className="border-l-0 border-zinc-300/80 pt-6 dark:border-zinc-800 lg:border-l lg:pl-8 lg:pt-0">
+            <dl className="grid grid-cols-2 gap-x-6 gap-y-5 text-sm lg:grid-cols-1">
+              {[
+                ["Focus", "Embedded / Frontend"],
+                ["Format", "Notes / Essays / Logs"],
+                ["Updated", "When things break"],
+              ].map(([label, value]) => (
+                <div key={label}>
+                  <dt className="text-[10px] font-semibold uppercase tracking-[0.22em] text-zinc-400 dark:text-zinc-600">
+                    {label}
+                  </dt>
+                  <dd className="mt-1 font-medium text-zinc-900 dark:text-zinc-100">
+                    {value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/search"
+                className="border border-zinc-950 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-950 transition-colors hover:bg-zinc-950 hover:text-white dark:border-zinc-100 dark:text-zinc-100 dark:hover:bg-zinc-100 dark:hover:text-zinc-950"
+              >
+                Search
+              </Link>
+              <Link
+                href="/about"
+                className="border border-zinc-300 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-600 transition-colors hover:border-zinc-950 hover:text-zinc-950 dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-100 dark:hover:text-zinc-100"
+              >
+                About
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Link from "next/link";
 import GlobalGlow from "@/components/effects/GlobalGlow";
+import SiteHeader from "@/components/SiteHeader";
 import ThemeProvider from "@/components/ThemeProvider";
-import ThemeToggle from "@/components/ThemeToggle";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -43,103 +42,39 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}})()`,
+            __html: `(function(){try{var t=localStorage.getItem('theme');var d=window.matchMedia('(prefers-color-scheme:dark)').matches;if(t==='dark'||((t==='system'||!t)&&d)){document.documentElement.classList.add('dark')}}catch(e){}})()`,
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-zinc-50 dark:bg-zinc-950">
+      <body className="flex min-h-full flex-col bg-[#f7f6f2] text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
         <ThemeProvider>
-        <GlobalGlow>
-        {/* Header */}
-        <header className="sticky top-0 z-50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border-b border-zinc-200/60 dark:border-zinc-800">
-          <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-            <div className="flex items-center gap-8">
-              <Link
-                href="/"
-                className="text-lg font-bold text-zinc-900 dark:text-zinc-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors tracking-tight"
-              >
-                YUWEN
-              </Link>
+          <GlobalGlow>
+            <SiteHeader />
 
-              <nav className="hidden sm:flex items-center gap-6 text-sm">
-                <Link
-                  href="/"
-                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-                >
-                  首页
-                </Link>
-                <Link
-                  href="/search"
-                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-                >
-                  搜索
-                </Link>
-                <Link
-                  href="/series"
-                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-                >
-                  专栏
-                </Link>
-                <Link
-                  href="/photos"
-                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-                >
-                  照片
-                </Link>
-                <Link
-                  href="/notes"
-                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-                >
-                  动态
-                </Link>
-                <Link
-                  href="/links"
-                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-                >
-                  友链
-                </Link>
-                <Link
-                  href="/about"
-                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-                >
-                  关于
-                </Link>
-                <a
-                  href="/rss.xml"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-                >
-                  RSS
-                </a>
-              </nav>
-            </div>
+            <main className="flex-1">{children}</main>
 
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
-              <Link
-                href="/admin"
-                className="text-sm text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors"
-              >
-                管理
-              </Link>
-            </div>
-          </div>
-        </header>
-
-        {/* Main content */}
-        <main className="flex-1">{children}</main>
-
-        {/* Footer */}
-        <footer className="border-t border-zinc-200/60 dark:border-zinc-800 py-8">
-          <div className="max-w-7xl mx-auto px-6 text-center text-sm text-zinc-400 dark:text-zinc-500">
-            <p>
-              &copy; {new Date().getFullYear()} YUWEN. Powered by Next.js.
-              Built with curiosity.
-            </p>
-          </div>
-        </footer>
-        </GlobalGlow>
+            <footer className="border-t border-zinc-300/80 py-10 dark:border-zinc-800">
+              <div className="mx-auto grid max-w-7xl gap-6 px-4 text-sm text-zinc-500 dark:text-zinc-500 sm:grid-cols-[1fr_auto] sm:px-6">
+                <div>
+                  <p className="font-semibold uppercase tracking-[0.22em] text-zinc-950 dark:text-zinc-50">
+                    YUWEN.LOG
+                  </p>
+                  <p className="mt-2 max-w-md leading-6">
+                    写代码，也记录踩坑。嵌入式、前端、AI Agent 和折腾项目的个人技术刊物。
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-start gap-4 text-xs font-semibold uppercase tracking-[0.16em]">
+                  <a href="/rss.xml" className="transition-colors hover:text-blue-600 dark:hover:text-blue-400">
+                    RSS
+                  </a>
+                  <a href="https://github.com/UYSAUIYO" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-blue-600 dark:hover:text-blue-400">
+                    GitHub
+                  </a>
+                  <span>&copy; {new Date().getFullYear()}</span>
+                </div>
+              </div>
+            </footer>
+          </GlobalGlow>
         </ThemeProvider>
       </body>
     </html>

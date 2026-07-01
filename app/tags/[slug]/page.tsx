@@ -67,24 +67,27 @@ export default async function TagPage({ params, searchParams }: PageProps) {
   const totalPages = Math.ceil(total / 9);
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
-      <div className="mb-8">
-        <Link href="/" className="text-sm text-blue-600 dark:text-blue-400 hover:underline mb-2 inline-block">
-          &larr; 返回首页
+    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
+      <header className="mb-10 border-b border-zinc-300/80 pb-8 dark:border-zinc-800">
+        <Link href="/" className="mb-5 inline-block text-xs font-semibold uppercase tracking-[0.18em] text-blue-600 transition-colors hover:text-blue-800 dark:text-blue-400">
+          ← Back Home
         </Link>
-        <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-zinc-400 dark:text-zinc-600">
+          Tag
+        </p>
+        <h1 className="text-5xl font-black tracking-[-0.07em] text-zinc-950 dark:text-zinc-50 sm:text-7xl">
           #{tag.name}
         </h1>
-        <p className="text-sm text-zinc-400 mt-1">{total} 篇文章</p>
-      </div>
+        <p className="mt-5 font-mono text-xs text-zinc-500">{total} ARTICLES</p>
+      </header>
 
       {articles.length === 0 ? (
-        <div className="text-center py-20">
-          <p className="text-zinc-400 text-lg">该标签下暂无文章</p>
+        <div className="border-y border-zinc-300/80 py-20 text-center dark:border-zinc-800">
+          <p className="text-zinc-500">该标签下暂无文章</p>
         </div>
       ) : (
         <>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {articles.map((article) => (
               <ArticleCard
                 key={article.id}
