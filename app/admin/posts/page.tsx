@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
@@ -17,6 +17,14 @@ interface Article {
 }
 
 export default function AdminPostsPage() {
+  return (
+    <Suspense fallback={<div className="text-center py-20 text-zinc-400">加载中...</div>}>
+      <AdminPostsContent />
+    </Suspense>
+  );
+}
+
+function AdminPostsContent() {
   const searchParams = useSearchParams();
   const [articles, setArticles] = useState<Article[]>([]);
   const [total, setTotal] = useState(0);
